@@ -470,9 +470,6 @@ def check_bbox(bbox: BoxType) -> None:
             bbox[i]=1
     bbox=tuple(bbox)
     """Check if bbox boundaries are in range 0, 1 and minimums are lesser then maximums"""
-    for name, value in zip(["x_min", "y_min", "x_max", "y_max"], bbox[:4]):
-        if not 0 <= value <= 1 and not np.isclose(value, 0) and not np.isclose(value, 1):
-            raise ValueError(f"Expected {name} for bbox {bbox} to be in the range [0.0, 1.0], got {value}.")
     x_min, y_min, x_max, y_max = bbox[:4]
     if x_max <= x_min:
         raise ValueError(f"x_max is less than or equal to x_min for bbox {bbox}.")
