@@ -459,23 +459,38 @@ def convert_bboxes_from_albumentations(
     return [convert_bbox_from_albumentations(bbox, target_format, rows, cols, check_validity) for bbox in bboxes]
 
 
+# def check_bbox(bbox: BoxType) -> None:
+#     """Check if bbox boundaries are in range 0, 1 and minimums are lesser then maximums"""
+#    #my added block 
+#     bbox=list(bbox)
+#     for i in range(4):
+#         if (bbox[i]<0) :
+#             bbox[i]=0
+#         elif (bbox[i]>1) :
+#             bbox[i]=1
+#     bbox=tuple(bbox)
+#     """Check if bbox boundaries are in range 0, 1 and minimums are lesser then maximums"""
+#     x_min, y_min, x_max, y_max = bbox[:4]
+#     if x_max <= x_min:
+#         raise ValueError(f"x_max is less than or equal to x_min for bbox {bbox}.")
+#     if y_max <= y_min:
+#         raise ValueError(f"y_max is less than or equal to y_min for bbox {bbox}.")
+
+
 def check_bbox(bbox: BoxType) -> None:
     """Check if bbox boundaries are in range 0, 1 and minimums are lesser then maximums"""
-   #my added block 
-    bbox=list(bbox)
-    for i in range(4):
-        if (bbox[i]<0) :
-            bbox[i]=0
-        elif (bbox[i]>1) :
-            bbox[i]=1
-    bbox=tuple(bbox)
-    """Check if bbox boundaries are in range 0, 1 and minimums are lesser then maximums"""
     x_min, y_min, x_max, y_max = bbox[:4]
+    
+    # Clamp values to [0, 1] range
+    x_min = max(0, min(x_min, 1))
+    y_min = max(0, min(y_min, 1))
+    x_max = max(0, min(x_max, 1))
+    y_max = max(0, min(y_max, 1))
+    
     if x_max <= x_min:
         raise ValueError(f"x_max is less than or equal to x_min for bbox {bbox}.")
     if y_max <= y_min:
         raise ValueError(f"y_max is less than or equal to y_min for bbox {bbox}.")
-
 
 def check_bboxes(bboxes: Sequence[BoxType]) -> None:
     """Check if bboxes boundaries are in range 0, 1 and minimums are lesser then maximums"""
